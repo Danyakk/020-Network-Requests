@@ -20,8 +20,17 @@
 
 <body>
     <button id="loadButton">Загрузить список задач</button> <span id="loader" style="display: none;">Загрузка...</span>
-    <div id="todoList">
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Задача</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody id="todoList">
+        </tbody>
+    </table>
 
     <script>
         let url = "https://jsonplaceholder.typicode.com/todos";
@@ -33,7 +42,7 @@
             showLoader();
             fetch(url)
                 .then(response => response.json())
-                .then(json => renderList(json))
+                .then(json => renderTable(json))
                 .finally(hideLoader);
         });
 
@@ -45,21 +54,29 @@
             loader.style.display = "none";
         }
 
-        function renderList(list) {
-            list.forEach(element => {
-                let div = document.createElement("div");
-                div.innerHTML = `${element.id} (${element.completed}) - ${element.title}`;
-
+        function renderTable(table) {
+            table.forEach(element => {
+                let row = document.createElement("tr");
+                let id = document.createElement("td");
+                id.textContent = element.id;
+                let title = document.createElement("td");
+                title.textContent = element.title;
+                let comp = document.createElement("td");
                 if (element.completed) {
-                    div.classList.add("completed");
+                    comp.textContent = "✔";
+                    comp.classList.add("completed");
                 }
                 else {
-                    div.classList.add("incomplete");
+                    comp.textContent = "X"
+                    comp.classList.add("incomplete");
                 }
-                
-                todoList.append(div);
+                row.appendChild(id);
+                row.appendChild(title);
+                row.appendChild(comp);
+                todoList.appendChild(row);
             });
-        }
+        };
+
     </script>
 </body>
 
